@@ -18,14 +18,15 @@ int main()
     ifstream din("./dimage.bin", ios::in | ios::binary);
 	load_instruction(&iin);
 	load_data(&din);
+	IF << "0x0";
 	for(int i=0; i<34; ++i){
 		show_set.insert(i);
 	}
-	for(int i=0; i<5; ++i){
+	for(int i=0; i<9; ++i){
 		snap << "cycle " << dec << cycle << endl;
+		InstructionDecode();
 		InstructionFetch();
 		show_reg();
-		snap << endl << endl;
 		++cycle;
 	}
     return 0;

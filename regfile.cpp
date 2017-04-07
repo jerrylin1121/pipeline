@@ -11,16 +11,6 @@ set<int> show_set;
 stringstream IF, ID, EX, ME, WB;
 extern fstream snap;
 
-void clear_set(void)
-{
-	IF.str("");
-	ID.str("");
-	EX.str("");
-	ME.str("");
-	WB.str("");
-	show_set.clear();
-}
-
 void show_reg(void)
 {
 	for(set<int>::iterator it = show_set.begin(); it!=show_set.end(); ++it){
@@ -32,6 +22,8 @@ void show_reg(void)
 			snap << "$LO: 0x" << setfill('0') << setw(8) << hex << uppercase << reg_value[LO] << endl;
 	}
 	snap << "PC: 0x" << setfill('0') << setw(8) << hex << uppercase << reg_value[PC] << endl;
-	snap << "IF: 0x" << IF.str() << endl;
-	clear_set();
+	snap << "IF: " << IF.str() << endl;
+	snap << "ID: " << ID.str() << endl;
+	snap << endl << endl;
+	show_set.clear();
 }

@@ -1,1 +1,1 @@
-void decode_instructions(unsigned int);
+void InstructionDecode(void);
