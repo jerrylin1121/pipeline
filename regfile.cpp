@@ -1,14 +1,10 @@
-#include <iostream>
 #include <iomanip>
 #include <fstream>
-#include <sstream>
 #include "regfile.h"
-
-using namespace std;
 
 int reg_value[35];
 set<int> show_set;
-stringstream IF, ID, EX, ME, WB;
+Instruction *IF, *ID, *EX, *DM, *WB;
 extern fstream snap;
 
 void show_reg(void)
@@ -22,8 +18,14 @@ void show_reg(void)
 			snap << "$LO: 0x" << setfill('0') << setw(8) << hex << uppercase << reg_value[LO] << endl;
 	}
 	snap << "PC: 0x" << setfill('0') << setw(8) << hex << uppercase << reg_value[PC] << endl;
-	snap << "IF: " << IF.str() << endl;
-	snap << "ID: " << ID.str() << endl;
+	snap << "IF: " << IF << endl;
+	snap << "ID: " << ID << endl;
 	snap << endl << endl;
 	show_set.clear();
+}
+
+ostream& operator<<(ostream& os, const Instruction *in)
+{
+	os << in->out.str();
+	return os;
 }

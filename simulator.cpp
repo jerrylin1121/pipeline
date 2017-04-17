@@ -18,7 +18,11 @@ int main()
     ifstream din("./dimage.bin", ios::in | ios::binary);
 	load_instruction(&iin);
 	load_data(&din);
-	IF << "0x0";
+	IF = new Instruction();
+	ID = new Instruction();
+	EX = new Instruction();
+	ME = new Instruction();
+	WB = new Instruction();
 	for(int i=0; i<34; ++i){
 		show_set.insert(i);
 	}
