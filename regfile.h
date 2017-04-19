@@ -40,12 +40,14 @@ public:
 		out.str("");
 	}
 	void InstructionDecode(void);
+	void ALU(void);
 	void DataMemoryAccess(void);
 	void WriteBack(void);
 	friend ostream& operator<<(ostream& , const Instruction *);
 };
 extern ostream& operator<<(ostream& os, const Instruction * in);
 extern int reg_value[35];
+extern int reg_use[35];
 extern set<int> show_set;
 extern Instruction *IF, *ID, *EX, *DM, *WB;
 

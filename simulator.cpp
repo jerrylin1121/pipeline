@@ -6,6 +6,9 @@
 #include "regfile.h"
 #include "InstructionFetch.h"
 #include "InstructionDecode.h"
+#include "ALU.h"
+#include "DataMemoryAccess.h"
+#include "WriteBack.h"
 
 using namespace std;
 fstream snap("snapshot.rpt", fstream::out);
@@ -26,8 +29,12 @@ int main()
 	for(int i=0; i<34; ++i){
 		show_set.insert(i);
 	}
+	reg_value[PC] -= 4;
 	for(int i=0; i<9; ++i){
 		snap << "cycle " << dec << cycle << endl;
+		WriteBack();
+		DataMemoryAccess();
+		ALU();
 		InstructionDecode();
 		InstructionFetch();
 		show_reg();
