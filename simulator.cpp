@@ -21,7 +21,7 @@ int main()
 	IF = new Instruction();
 	ID = new Instruction();
 	EX = new Instruction();
-	ME = new Instruction();
+	DM = new Instruction();
 	WB = new Instruction();
 	for(int i=0; i<34; ++i){
 		show_set.insert(i);

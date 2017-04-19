@@ -8,7 +8,7 @@ class Instruction{
 private:
 	unsigned int instruction, opcode, funct;
 	unsigned int rs, rt, rd;
-	int A, B, C, ALUout;
+	int A, B, C, ALUOut, MDR;
 public:
 	stringstream out;
 	Instruction(void){
@@ -21,7 +21,8 @@ public:
 		A = 0;
 		B = 0;
 		C = 0;
-		ALUout = 0;
+		ALUOut = 0;
+		MDR = 0;
 		out.str("NOP");	
 	}
 	Instruction(unsigned int in){
@@ -34,10 +35,13 @@ public:
 		A = 0;
 		B = 0;
 		C = in&0x0000ffff;
-		ALUout = 0;
+		ALUOut = 0;
+		MDR = 0;
 		out.str("");
 	}
 	void InstructionDecode(void);
+	void DataMemoryAccess(void);
+	void WriteBack(void);
 	friend ostream& operator<<(ostream& , const Instruction *);
 };
 extern ostream& operator<<(ostream& os, const Instruction * in);

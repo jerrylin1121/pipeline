@@ -1,6 +1,10 @@
-pipeline:clean simulator.o InstructionDecode.o memory.o regfile.o InstructionFetch.o
+pipeline:clean simulator.o InstructionDecode.o memory.o regfile.o InstructionFetch.o WriteBack.o DataMemoryAccess.o
 	g++ -std=c++0x -g -o pipeline simulator.o InstructionDecode.o memory.o regfile.o InstructionFetch.o
 	rm -f *.o
+DataMemoryAccess.o:
+	g++ -std=c++0x -c DataMemoryAccess.cpp -o DataMemoryAccess.o
+WriteBack.o:
+	g++ -std=c++0x -c WriteBack.cpp -o WriteBack.o
 InstructionFetch.o:
 	g++ -std=c++0x -c InstructionFetch.cpp -o InstructionFetch.o
 error.o:error.cpp
