@@ -4,7 +4,7 @@
 
 int reg_value[35];
 int reg_use[35];
-set<int> show_set;
+set<int> show_set, next_show_set;
 Instruction *IF, *ID, *EX, *DM, *WB;
 extern fstream snap;
 
@@ -25,7 +25,8 @@ void show_reg(void)
 	snap << "DM: " << DM << endl;
 	snap << "WB: " << WB << endl;
 	snap << endl << endl;
-	show_set.clear();
+	show_set = next_show_set;
+	next_show_set.clear();
 }
 
 ostream& operator<<(ostream& os, const Instruction *in)

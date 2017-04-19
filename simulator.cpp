@@ -15,6 +15,8 @@ fstream snap("snapshot.rpt", fstream::out);
 int cycle = 0;
 bool halt = false;
 
+bool detect_end(void);
+
 int main()
 {
     ifstream iin("./iimage.bin", ios::in | ios::binary);
@@ -30,7 +32,7 @@ int main()
 		show_set.insert(i);
 	}
 	reg_value[PC] -= 4;
-	for(int i=0; i<9; ++i){
+	while(!detect_end()){
 		snap << "cycle " << dec << cycle << endl;
 		WriteBack();
 		DataMemoryAccess();
@@ -41,4 +43,11 @@ int main()
 		++cycle;
 	}
     return 0;
+}
+bool detect_end(void)
+{
+	if(IF->opcode==0x3f && ID->opcode==0x3f && EX->opcode==0x3f && DM->opcode==0x3f && WB->opcode ==0x3f)
+		return true;
+	else
+		return false;
 }

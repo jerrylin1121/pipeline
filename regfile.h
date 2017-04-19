@@ -6,10 +6,13 @@
 using namespace std;
 class Instruction{
 private:
-	unsigned int instruction, opcode, funct;
+	unsigned int instruction, funct;
 	unsigned int rs, rt, rd;
-	int A, B, C, ALUOut, MDR;
+	int A, B, C;
 public:
+	unsigned int opcode;
+	bool ALUReady, MDRReady, stall;
+	int ALUOut, MDR;
 	stringstream out;
 	Instruction(void){
 		instruction = 0;
@@ -21,6 +24,9 @@ public:
 		A = 0;
 		B = 0;
 		C = 0;
+		ALUReady = false;
+		MDRReady = false;
+		stall = false;
 		ALUOut = 0;
 		MDR = 0;
 		out.str("NOP");	
@@ -35,6 +41,9 @@ public:
 		A = 0;
 		B = 0;
 		C = in&0x0000ffff;
+		ALUReady = false;
+		MDRReady = false;
+		stall = false;
 		ALUOut = 0;
 		MDR = 0;
 		out.str("");
@@ -43,12 +52,13 @@ public:
 	void ALU(void);
 	void DataMemoryAccess(void);
 	void WriteBack(void);
+	void End(void);
 	friend ostream& operator<<(ostream& , const Instruction *);
 };
 extern ostream& operator<<(ostream& os, const Instruction * in);
 extern int reg_value[35];
 extern int reg_use[35];
-extern set<int> show_set;
+extern set<int> show_set, next_show_set;
 extern Instruction *IF, *ID, *EX, *DM, *WB;
 
 void show_reg(void);
