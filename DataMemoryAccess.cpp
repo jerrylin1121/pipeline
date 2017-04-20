@@ -4,6 +4,11 @@ void DataMemoryAccess(void)
 {
 	DM = EX;
 	DM->DataMemoryAccess();
+	string str;
+	DM->out >> str;
+	DM->out.str("");
+	DM->out.clear();
+	DM->out << str;
 }
 void Instruction::DataMemoryAccess(void)
 {
@@ -18,6 +23,9 @@ void Instruction::DataMemoryAccess(void)
 			}
 	}
 	switch(opcode){
+		case 0x08: case 0x09: case 0x0f: case 0x0c: case 0x0d: case 0x0e: case 0x0a:
+			reg_use[rt] = 2;
+			break;
 		case 0x23:
 			MDR = load_data(ALUOut, 4);
 			MDRReady = true;

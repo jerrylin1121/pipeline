@@ -1,14 +1,19 @@
+#include <iostream>
 #include "regfile.h"
+using namespace std;
+extern int cycle;
 void ALU(void)
 {
 	if(ID->stall){
 		EX = new Instruction();
 	}else{
 		EX = ID;
-		EX->ALU();
 		string str;
 		EX->out >> str;
-		EX->out.str(str);
+		EX->out.str("");
+		EX->out.clear();
+		EX->out << str;
+		EX->ALU();
 	}
 }
 void Instruction::ALU(void)
@@ -142,8 +147,8 @@ void Instruction::ALU(void)
 						lli  = (long long int)A * (long long int)B;
 						reg_value[HI] = lli >> 32;
 						reg_value[LO] = lli;
-						if(tmp!=reg_value[HI]) show_set.insert(HI);
-						if(tmp1!=reg_value[LO]) show_set.insert(LO);
+						if(tmp!=reg_value[HI]) next_show_set.insert(HI);
+						if(tmp1!=reg_value[LO]) next_show_set.insert(LO);
 					break;
 				case 0x19:
 						tmp = reg_value[HI];
@@ -151,8 +156,8 @@ void Instruction::ALU(void)
 						ulli  = (unsigned long long int)(unsigned int)A * (unsigned long long int)(unsigned int)B;
 						reg_value[HI] = lli >> 32;
 						reg_value[LO] = lli;
-						if(tmp!=reg_value[HI]) show_set.insert(HI);
-						if(tmp1!=reg_value[LO]) show_set.insert(LO);
+						if(tmp!=reg_value[HI]) next_show_set.insert(HI);
+						if(tmp1!=reg_value[LO]) next_show_set.insert(LO);
 					break;
 				case 0x10:
 						ALUOut = reg_value[HI];

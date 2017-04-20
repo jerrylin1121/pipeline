@@ -32,6 +32,9 @@ int main()
 		show_set.insert(i);
 	}
 	reg_value[PC] -= 4;
+	for(int i=0; i<num_of_ins; ++i){
+		cout << dec << (4*i)+reg_value[PC] << " " << ins_mem[i+(reg_value[PC]/4)] << endl;
+	}
 	while(!detect_end()){
 		snap << "cycle " << dec << cycle << endl;
 		WriteBack();

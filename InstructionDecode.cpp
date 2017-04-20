@@ -17,7 +17,6 @@ void InstructionDecode(void)
 	ID->InstructionDecode();
 	if(ID->stall){
 		ID->out << " to_be_stalled";
-		IF->stall = true;
 	}
 }
 void Instruction::InstructionDecode(void)
@@ -33,63 +32,54 @@ void Instruction::InstructionDecode(void)
 				case 0x20:
 //					snap << "add $" << rd << " $" << rs << " $" << rt << endl;
 					out << "ADD";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					needA = true;
 					needB = true;
 					break;
 				case 0x21:
 //					snap << "addu $" << rd << " $" << rs << " $" << rt << endl;
 					out << "ADDU";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					needA = true;
 					needB = true;
 					break;
 				case 0x22:
 //					snap << "sub $" << rd << " $" << rs << " $" << rt << endl;
 					out << "SUB";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					needA = true;
 					needB = true;
 					break;
 				case 0x24:
 //					snap << "and $" << rd << " $" << rs << " $" << rt << endl;
 					out << "AND";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					needA = true;
 					needB = true;
 					break;
 				case 0x25:
 //					snap << "or $" << rd << " $" << rs << " $" << rt << endl;
 					out << "OR";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					needA = true;
 					needB = true;
 					break;
 				case 0x26:
 //					snap << "xor $" << rd << " $" << rs << " $" << rt << endl;
 					out << "XOR";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					needA = true;
 					needB = true;
 					break;
 				case 0x27:
 //					snap << "nor $" << rd << " $" << rs << " $" << rt << endl;
 					out << "NOR";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					needA = true;
 					needB = true;
 					break;
 				case 0x28:
 //					snap << "nand $" << rd << " $" << rs << " $" << rt << endl;
 					out << "NAND";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					needA = true;
 					needB = true;
 					break;
 				case 0x2a:
 //					snap << "slt $" << rd << " $" << rs << " $" << rt << endl;
 					out << "SLT";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					needA = true;
 					needB = true;
 					break;
@@ -99,20 +89,17 @@ void Instruction::InstructionDecode(void)
 						out << "NOP";
 					}else{
 						out << "SLL";
-						if(reg_use[rd]==0) reg_use[rd] = 1;
 						needB = true;
 					}
 					break;
 				case 0x02:
 //					snap << "srl $" << rd << " $" << rt << " " << setfill('0') << setw(4) << hex << C << endl;
 					out << "SRL";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					needB = true;
 					break;
 				case 0x03:
 //					snap << "sra $" << rd << " $" << rs << " " << setfill('0') << setw(4) << hex<< C << endl;
 					out << "SRA";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					needB = true;
 					break;
 				case 0x08:
@@ -135,12 +122,10 @@ void Instruction::InstructionDecode(void)
 				case 0x10:
 //					snap << "mfhi $" << rd << endl;
 					out << "MFHI";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					break;
 				case 0x12:
 //					snap << "mflo $" << rd << endl;
 					out << "MFLO";
-					if(reg_use[rd]==0) reg_use[rd] = 1;
 					break;
 				default:
 //					snap << "illegal" << endl;
@@ -154,49 +139,42 @@ void Instruction::InstructionDecode(void)
 //			snap << "addi $" << rt << " $" << rs << " " << setfill('0') << setw(4) << hex << C << endl;
 			out << "ADDI";
 			C = (C<<16)>>16;
-			if(reg_use[rt]==0) reg_use[rt] = 1;
 			needA = true;
 			break;
 		case 0x09:
 //			snap << "addiu $" << rt << " $" << rs << " " << setfill('0') << setw(4) << hex << C << endl;
 			out << "ADDIU";
 			C = (C<<16)>>16;
-			if(reg_use[rt]==0) reg_use[rt] = 1;
 			needA = true;
 			break;
 		case 0x23:
 //			snap << "lw $" << rt << " " << setfill('0') << setw(4) << hex << C << "($" << rs << ")" << endl;
 			out << "LW";
 			C = (C<<16)>>16;
-			if(reg_use[rt]==0) reg_use[rt] = 1;
 			needA = true;
 			break;
 		case 0x21:
 //			snap << "lh $" << rt << " " << setfill('0') << setw(4) << hex << C << "($" << rs << ")" << endl;
 			out << "LH";
 			C = (C<<16)>>16;
-			if(reg_use[rt]==0) reg_use[rt] = 1;
 			needA = true;
 			break;
 		case 0x25:
 //	  		snap << "lhu $" << rt << " " << setfill('0') << setw(4) << hex << C << "($" << rs << ")" << endl;
 			out << "LHU";
 			C = (C<<16)>>16;
-			if(reg_use[rt]==0) reg_use[rt] = 1;
 			needA = true;
 			break;
 		case 0x20:
 //	  		snap << "lb $" << rt << " " << setfill('0') << setw(4) << hex << C << "($" << rs << ")" << endl;
 			out << "LB";
 			C = (C<<16)>>16;
-			if(reg_use[rt]==0) reg_use[rt] = 1;
 			needA = true;
 			break;
 		case 0x24:
 //			snap << "lbu $" << rt << " " << setfill('0') << setw(4) << hex << C << "($" << rs << ")" << endl;
 			out << "LBU";
 			C = (C<<16)>>16;
-			if(reg_use[rt]==0) reg_use[rt] = 1;
 			needA = true;
 			break;
 		case 0x2b:
@@ -220,31 +198,26 @@ void Instruction::InstructionDecode(void)
 		case 0x0f:
 //			snap << "lui $" << rt << " " << setfill('0') << setw(4) << hex << C << endl;
 			out << "LUI";
-			if(reg_use[rt]==0) reg_use[rt] = 1;
 			break;
 		case 0x0c:
 //			snap << "andi $" << rt << " $" << rs << " " << setfill('0') << setw(4) << hex << C << endl;
 			out << "ANDI";
-			if(reg_use[rt]==0) reg_use[rt] = 1;
 			needA = true;
 			break;
 		case 0x0d:
 //			snap << "ori $" << rt << " $" << rs << " " << setfill('0') << setw(4) << hex << C << endl;
 			out << "ORI";
-			if(reg_use[rt]==0) reg_use[rt] = 1;
 			needA = true;
 			break;
 		case 0x0e:
 //			snap << "nori $" << rt << " $" << rs << " " << setfill('0') << setw(4) << hex << C << endl;
 			out << "NORI";
-			if(reg_use[rt]==0) reg_use[rt] = 1;
 			needA = true;
 			break;
 		case 0x0a:
 //			snap << "slti $" << rt << " $" << rs << " " << setfill('0') << setw(4) << hex << C << endl;
 			out << "SLTI";
 			C = (C<<16)>>16;
-			if(reg_use[rt]==0) reg_use[rt] = 1;
 			needA = true;
 			break;
 		case 0x04:
@@ -308,6 +281,13 @@ void Instruction::InstructionDecode(void)
 						stall = true;
 						return;
 					}
+				}else{
+					if(reg_use[rs]==1){
+						if(!EX->ALUReady){
+							stall = true;
+							return;
+						}
+					}
 				}
 				break;
 			case 0x04: case 0x05: case 0x07:
@@ -327,7 +307,7 @@ void Instruction::InstructionDecode(void)
 				}
 				break;
 			default:
-				if(reg_use[rs]==2){
+				if(reg_use[rs]==1){
 					if(!EX->ALUReady)
 						stall = true;
 						return;
@@ -353,10 +333,17 @@ void Instruction::InstructionDecode(void)
 						stall = true;
 						return;
 					}
+				}else{
+					if(reg_use[rt]==1){
+						if(!EX->ALUReady){
+							stall = true;
+							return;
+						}
+					}
 				}
 				break;
 			case 0x04: case 0x05: case 0x07:
-				if(reg_use[rt]==0){
+				if(reg_use[rt]==0 || reg_use[rt]==3){
 					B = reg_value[rt];
 				}else if(reg_use[rt]==2){
 					if(DM->ALUReady){
@@ -372,7 +359,7 @@ void Instruction::InstructionDecode(void)
 				}
 				break;
 			default:
-				if(reg_use[rt]==2){
+				if(reg_use[rt]==1){
 					if(!EX->ALUReady)
 						stall = true;
 						return;
@@ -386,12 +373,12 @@ void Instruction::InstructionDecode(void)
 				reg_value[PC] = A;
 			}
 			break;
-		case 0x08:
+		case 0x04:
 			if(A==B){
 				reg_value[PC] = reg_value[PC] + 4*C;
 			}
 			break;
-		case 0x09:
+		case 0x05:
 			if(A!=B){
 				reg_value[PC] = reg_value[PC] + 4*C;
 			}
