@@ -58,7 +58,8 @@ public:
 extern ostream& operator<<(ostream& os, const Instruction * in);
 extern int reg_value[35];
 extern int reg_use[35];
-extern set<int> show_set, next_show_set;
+extern set<int> show_set;
 extern Instruction *IF, *ID, *EX, *DM, *WB;
 
 void show_reg(void);
+void show_stage(void);

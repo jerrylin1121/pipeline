@@ -272,7 +272,7 @@ void Instruction::InstructionDecode(void)
 					}else if(reg_use[rs]==2){
 						if(DM->ALUReady){
 							A = DM->ALUOut;
-							out << " fwd_EX-DM_rs_$" << rs;
+							out << " fwd_EX-DM_rs_$" << dec << rs;
 						}else{
 							stall = true;
 							return;
@@ -296,7 +296,7 @@ void Instruction::InstructionDecode(void)
 				}else if(reg_use[rs]==2){
 					if(DM->ALUReady){
 						A = DM->ALUOut;
-						out << " fwd_EX-DM_rs_$" << rs;
+						out << " fwd_EX-DM_rs_$" << dec << rs;
 					}else{
 						stall = true;
 						return;

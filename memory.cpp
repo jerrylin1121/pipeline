@@ -48,12 +48,12 @@ void load_data(ifstream *in)
 }
 int load_data(int index, int size)
 {
-/*	if(index < 0 || index+size-1 > 1023 || index-1 > 1023){
+	if(index < 0 || index+size-1 > 1023 || index-1 > 1023){
 		mem_address_overflow();
 	}
 	if(index % size){
 		data_misaligned();
-	}*/
+	}
 	if(halt) return 0;
 	int rt = data_mem[index];
 	if(size>=2) rt = (rt<<8) + data_mem[index+1];
@@ -64,12 +64,12 @@ int load_data(int index, int size)
 }
 void save_data(int index, int size, int value)
 {
-	/*if(index < 0 || index+size-1 > 1023 || index-1 > 1023){
+	if(index < 0 || index+size-1 > 1023 || index-1 > 1023){
 		mem_address_overflow();
 	}
 	if(index % size){
 		data_misaligned();
-	}*/
+	}
 	if(halt) return;
 	unsigned int _value = (unsigned int)value;
 	if(size==1){

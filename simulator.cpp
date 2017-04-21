@@ -31,18 +31,15 @@ int main()
 	for(int i=0; i<34; ++i){
 		show_set.insert(i);
 	}
-	reg_value[PC] -= 4;
-	for(int i=0; i<num_of_ins; ++i){
-		cout << dec << (4*i)+reg_value[PC] << " " << ins_mem[i+(reg_value[PC]/4)] << endl;
-	}
-	while(!detect_end()){
+	while(!detect_end() && !halt){
 		snap << "cycle " << dec << cycle << endl;
+		show_reg();
 		WriteBack();
 		DataMemoryAccess();
 		ALU();
 		InstructionDecode();
 		InstructionFetch();
-		show_reg();
+		show_stage();
 		++cycle;
 	}
     return 0;

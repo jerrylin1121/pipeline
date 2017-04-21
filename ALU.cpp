@@ -1,5 +1,6 @@
 #include <iostream>
 #include "regfile.h"
+#include "error.h"
 using namespace std;
 extern int cycle;
 void ALU(void)
@@ -46,15 +47,15 @@ void Instruction::ALU(void)
 		}else if(reg_use[rs]==2){
 			if(DM->ALUReady){
 				A = DM->ALUOut;
-				out << " fwd_EX-DM_rs_$" << rs;
+				out << " fwd_EX-DM_rs_$" << dec << rs;
 			}
 		}else if(reg_use[rs]==3){
 			if(WB->ALUReady){
 				A = WB->ALUOut;
-				out << " fwd_DM-WB_rs_$" << rs;
+				out << " fwd_DM-WB_rs_$" << dec << rs;
 			}else if(WB->MDRReady){
 				A = WB->MDR;
-				out << " fwd_DM-WB_rs_$" << rs;
+				out << " fwd_DM-WB_rs_$" << dec << rs;
 			}
 		}
 	}
@@ -64,15 +65,15 @@ void Instruction::ALU(void)
 		}else if(reg_use[rt]==2){
 			if(DM->ALUReady){
 				B = DM->ALUOut;
-				out << " fwd_EX-DM_rt_$" << rt;
+				out << " fwd_EX-DM_rt_$" << dec << rt;
 			}
 		}else if(reg_use[rt]==3){
 			if(WB->ALUReady){
 				B = WB->ALUOut;
-				out << " fwd_DM-WB_rt_$" << rt;
+				out << " fwd_DM-WB_rt_$" << dec << rt;
 			}else if(WB->MDRReady){
 				B = WB->MDR;
-				out << " fwd_DM-WB_rt_$" << rt;
+				out << " fwd_DM-WB_rt_$" << dec << rt;
 			}
 		}
 	}
@@ -81,6 +82,7 @@ void Instruction::ALU(void)
 			switch(funct){
 				case 0x20:
 						ALUOut = A + B;
+						detect_number_overflow(A>=0, B>=0, ALUOut>=0);
 						ALUReady = true;
 						reg_use[rd] = 1;
 					break;
@@ -91,6 +93,7 @@ void Instruction::ALU(void)
 					break;
 				case 0x22:
 						ALUOut = A - B;
+						detect_number_overflow(A>=0, (-B)>=0, (ALUOut)>=0);
 						ALUReady = true;
 						reg_use[rd] = 1;
 					break;
@@ -142,29 +145,33 @@ void Instruction::ALU(void)
 						reg_use[rd] = 1;
 					break;
 				case 0x18:
+						overwrite_HI_LO(true);
 						tmp = reg_value[HI];
 						tmp1 = reg_value[LO];
 						lli  = (long long int)A * (long long int)B;
 						reg_value[HI] = lli >> 32;
 						reg_value[LO] = lli;
-						if(tmp!=reg_value[HI]) next_show_set.insert(HI);
-						if(tmp1!=reg_value[LO]) next_show_set.insert(LO);
+						if(tmp!=reg_value[HI]) show_set.insert(HI);
+						if(tmp1!=reg_value[LO]) show_set.insert(LO);
 					break;
 				case 0x19:
+						overwrite_HI_LO(true);
 						tmp = reg_value[HI];
 						tmp1 = reg_value[LO];
 						ulli  = (unsigned long long int)(unsigned int)A * (unsigned long long int)(unsigned int)B;
-						reg_value[HI] = lli >> 32;
-						reg_value[LO] = lli;
-						if(tmp!=reg_value[HI]) next_show_set.insert(HI);
-						if(tmp1!=reg_value[LO]) next_show_set.insert(LO);
+						reg_value[HI] = ulli >> 32;
+						reg_value[LO] = ulli;
+						if(tmp!=reg_value[HI]) show_set.insert(HI);
+						if(tmp1!=reg_value[LO]) show_set.insert(LO);
 					break;
 				case 0x10:
+						overwrite_HI_LO(false);
 						ALUOut = reg_value[HI];
 						ALUReady = true;
 						reg_use[rd] = 1;
 					break;
 				case 0x12:
+						overwrite_HI_LO(false);
 						ALUOut = reg_value[LO];
 						ALUReady = true;
 						reg_use[rd] = 1;
@@ -173,6 +180,7 @@ void Instruction::ALU(void)
 			break;
 		case 0x08:
 				ALUOut = A + C;
+				detect_number_overflow(A>=0, C>=0, ALUOut>=0);
 				ALUReady = true;
 				reg_use[rt] = 1;
 			break;
@@ -183,32 +191,40 @@ void Instruction::ALU(void)
 			break;
 		case 0x23:
 				ALUOut = A + C;
+				detect_number_overflow(A>=0, C>=0, ALUOut>=0);
 				reg_use[rt] = 1;
 			break;
 		case 0x21:
 				ALUOut = A + C;
+				detect_number_overflow(A>=0, C>=0, ALUOut>=0);
 				reg_use[rt] = 1;
 			break;
 		case 0x25:
 				ALUOut = A + C;
+				detect_number_overflow(A>=0, C>=0, ALUOut>=0);
 				reg_use[rt] = 1;
 			break;
 		case 0x20:
 				ALUOut = A + C;
+				detect_number_overflow(A>=0, C>=0, ALUOut>=0);
 				reg_use[rt] = 1;
 			break;
 		case 0x24:
 				ALUOut = A + C;
+				detect_number_overflow(A>=0, C>=0, ALUOut>=0);
 				reg_use[rt] = 1;
 			break;
 		case 0x2b:
 				ALUOut = A + C;
+				detect_number_overflow(A>=0, C>=0, ALUOut>=0);
 			break;
 		case 0x29:
 				ALUOut = A + C;
+				detect_number_overflow(A>=0, C>=0, ALUOut>=0);
 			break;
 		case 0x28:
 				ALUOut = A + C;
+				detect_number_overflow(A>=0, C>=0, ALUOut>=0);
 			break;
 		case 0x0f:
 				ALUOut = A << C;
