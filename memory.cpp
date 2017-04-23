@@ -1,10 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include "regfile.h"
-#include "memory.h"
-#include "error.h"
-using namespace std;
+#include "library.h"
 unsigned int ins_mem[256];
 unsigned int num_of_ins;
 unsigned int data_mem[1024];

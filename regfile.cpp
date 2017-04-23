@@ -1,7 +1,4 @@
-#include <iomanip>
-#include <fstream>
-#include "regfile.h"
-
+#include "library.h"
 int reg_value[35];
 int reg_use[35];
 set<int> show_set;

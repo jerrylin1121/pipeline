@@ -1,5 +1,4 @@
-#include "regfile.h"
-#include "error.h"
+#include "library.h"
 void WriteBack(void)
 {
 	WB->End();
@@ -18,8 +17,8 @@ void Instruction::WriteBack(void)
 							if(reg_value[rd]!=ALUOut) show_set.insert(rd);
 							reg_value[rd] = ALUOut;
 						}
-					reg_use[rd] = 3;
 					}
+					reg_use[rd] = 3;
 				case 0x18: case 0x19: case 0x08:
 					break;
 				default:
@@ -45,6 +44,11 @@ void Instruction::WriteBack(void)
 			}
 			reg_use[rt] = 3;
 			break;
+		case 0x03:
+			if(reg_value[31]!=ALUOut) show_set.insert(31);
+			reg_value[31] = ALUOut;
+			reg_use[31] = 3;
+			break;
 	}
 }
 void Instruction::End(void)
@@ -64,6 +68,9 @@ void Instruction::End(void)
 			break;
 		case 0x23: case 0x21: case 0x25: case 0x20: case 0x24:
 			reg_use[rt] = 0;
+			break;
+		case 0x03:
+			reg_use[31] = 0;
 			break;
 	}
 }

@@ -1,7 +1,4 @@
-#include <iostream>
-#include "regfile.h"
-#include "error.h"
-using namespace std;
+#include "library.h"
 extern int cycle;
 void ALU(void)
 {
@@ -26,6 +23,8 @@ void Instruction::ALU(void)
 	switch(opcode){
 		case 0x00:
 			switch(funct){
+				case 0x08:
+					break;
 				case 0x10: case 0x12:
 					break;
 				case 0x00: case 0x02: case 0x03:
@@ -37,11 +36,15 @@ void Instruction::ALU(void)
 					break;
 			}
 			break;
-		case 0x08: case 0x09: case 0x23: case 0x21: case 0x25: case 0x20: case 0x24: case 0x2b: case 0x29: case 0x28: case 0x0c: case 0x0d: case 0x0e: case 0x0a:
+		case 0x2b: case 0x29: case 0x28:
+			needA = true;
+			needB = true;
+			break;
+		case 0x08: case 0x09: case 0x23: case 0x21: case 0x25: case 0x20: case 0x24: case 0x0c: case 0x0d: case 0x0e: case 0x0a:
 			needA = true;
 			break;
 	}
-	if(needA){
+	if(needA && rs!=0){
 		if(reg_use[rs]==0 || reg_use[rs]==1){
 			A = reg_value[rs];
 		}else if(reg_use[rs]==2){
@@ -59,7 +62,7 @@ void Instruction::ALU(void)
 			}
 		}
 	}
-	if(needB){
+	if(needB && rt!=0){
 		if(reg_use[rt]==0 || reg_use[rt]==1){
 			B = reg_value[rt];
 		}else if(reg_use[rt]==2){
@@ -227,7 +230,7 @@ void Instruction::ALU(void)
 				detect_number_overflow(A>=0, C>=0, ALUOut>=0);
 			break;
 		case 0x0f:
-				ALUOut = A << C;
+				ALUOut = C << 16;
 				ALUReady = true;
 				reg_use[rt] = 1;
 			break;
@@ -250,6 +253,10 @@ void Instruction::ALU(void)
 				ALUOut = A < C;
 				ALUReady = true;
 				reg_use[rt] = 1;
+			break;
+		case 0x03:
+				ALUReady = true;
+				reg_use[31] = 1;
 			break;
 	}
 }

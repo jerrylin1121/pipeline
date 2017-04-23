@@ -1,27 +1,34 @@
-#include <iostream>
-#include <cstdlib>
-#include <iomanip>
-#include <fstream>
-#include <string>
-#include "InstructionDecode.h"
-#include "memory.h"
-#include "regfile.h"
-#include "error.h"
-using namespace std;
+#include "library.h"
 extern fstream snap;
+bool flushed = false;
+int next_PC;
 void InstructionDecode(void)
 {
-	if(!ID->stall)
-		ID = IF;
-	ID->stall = false;
-	ID->InstructionDecode();
-	if(ID->stall){
-		ID->out << " to_be_stalled";
+	if(flushed){
+		next_PC = reg_value[PC]+4;
+		delete IF;
+		ID = new Instruction();
+		flushed = false;
+	}else{
+		next_PC = reg_value[PC]+4;
+		if(!ID->stall){
+			ID = IF;
+		}
+		ID->stall = false;
+		ID->InstructionDecode();
+		if(ID->stall){
+			string str;
+			ID->out >> str;
+			ID->out.str("");
+			ID->out.clear();
+			ID->out << str << " to_be_stalled";
+		}
 	}
 }
 void Instruction::InstructionDecode(void)
 {
 	out.str("");
+	out.clear();
 	bool needA = false, needB = false;
 	switch(opcode){
 		//R-type Instructions
@@ -182,18 +189,21 @@ void Instruction::InstructionDecode(void)
 			out << "SW";
 			C = (C<<16)>>16;
 			needA = true;
+			needB = true;
 			break;
 		case 0x29:
 //			snap << "sh $" << rt << " " << setfill('0') << setw(4) << hex << C << "($" << rs << ")" << endl;
 			out << "SH";
 			C = (C<<16)>>16;
 			needA = true;
+			needB = true;
 			break;
 		case 0x28:
 //			snap << "sb $" << rt << " " << setfill('0') << setw(4) << hex << C << "($" << rs << ")" << endl;
 			out << "SB";
 			C = (C<<16)>>16;
 			needA = true;
+			needB = true;
 			break;
 		case 0x0f:
 //			snap << "lui $" << rt << " " << setfill('0') << setw(4) << hex << C << endl;
@@ -263,7 +273,7 @@ void Instruction::InstructionDecode(void)
 			exit(0);
 			break;
 	}
-	if(needA){
+	if(needA && rs!=0){
 		switch(opcode){
 			case 0x00:
 				if(funct==0x08){
@@ -315,7 +325,7 @@ void Instruction::InstructionDecode(void)
 				break;
 		}
 	}
-	if(needB){
+	if(needB && rt!=0){
 		switch(opcode){
 			case 0x00:
 				if(funct==0x08){
@@ -324,7 +334,7 @@ void Instruction::InstructionDecode(void)
 					}else if(reg_use[rt]==2){
 						if(DM->ALUReady){
 							B = DM->ALUOut;
-							out << " fwd_EX-DM_rt_$" << rt;
+							out << " fwd_EX-DM_rt_$" << dec << rt;
 						}else{
 							stall = true;
 							return;
@@ -347,8 +357,8 @@ void Instruction::InstructionDecode(void)
 					B = reg_value[rt];
 				}else if(reg_use[rt]==2){
 					if(DM->ALUReady){
-						B = ALUOut;
-						out << " fwd_EX-DM_rt_$" << rt;
+						B = DM->ALUOut;
+						out << " fwd_EX-DM_rt_$" << dec << rt;
 					}else{
 						stall = true;
 						return;
@@ -370,28 +380,36 @@ void Instruction::InstructionDecode(void)
 	switch(opcode){
 		case 0x00:
 			if(funct==0x08){
-				reg_value[PC] = A;
+				next_PC = A;
+				flushed = true;
 			}
 			break;
 		case 0x04:
 			if(A==B){
-				reg_value[PC] = reg_value[PC] + 4*C;
+				next_PC = reg_value[PC] + 4*C;
+				flushed = true;
 			}
 			break;
 		case 0x05:
 			if(A!=B){
-				reg_value[PC] = reg_value[PC] + 4*C;
+				next_PC = reg_value[PC] + 4*C;
+				flushed = true;
 			}
 			break;
 		case 0x07:
 			if(A>0){
-				reg_value[PC] = reg_value[PC] + 4*C;
+				next_PC = reg_value[PC] + 4*C;
+				flushed = true;
 			}
 			break;
 		case 0x02:
-			reg_value[PC] = (PC&0xf0000000) | 4*C;
+			next_PC = ((reg_value[PC])&0xf0000000) | 4*C;
+			flushed = true;
 			break;
 		case 0x03:
-			reg_value[PC] = (PC&0xf0000000) | 4*C;
+			ALUOut = reg_value[PC];
+			next_PC = ((reg_value[PC])&0xf0000000) | 4*C;
+			flushed = true;
+			break;
 	}
 }

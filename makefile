@@ -1,5 +1,5 @@
 pipeline:clean
-	g++ -std=c++11 -g -o pipeline *.cpp
+	g++ -std=c++14 -o pipeline *.cpp
 clean:
 	rm -f *.o *.rpt pipeline
 clean_test:

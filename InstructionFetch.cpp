@@ -1,19 +1,22 @@
-#include <iostream>
-#include <iomanip>
-#include "memory.h"
-#include "regfile.h"
+#include "library.h"
 
-using namespace std;
+extern bool flushed;
+extern int next_PC;
 void InstructionFetch()
 {
-	if(ID->stall){
+	if(flushed){
+		IF = new Instruction(ins_mem[(reg_value[PC])/4]);
+		IF->out << "0x" << setfill('0') << setw(8) << hex << uppercase << ins_mem[(reg_value[PC]/4)] << " to_be_flushed";
+		reg_value[PC] = next_PC;
+		IF->stall = false;
+	}else if(ID->stall){
 		if(ID==IF){
 			IF = new Instruction(ins_mem[(reg_value[PC])/4]);
 			IF->out << "0x" << setfill('0') << setw(8) << hex << uppercase << ins_mem[(reg_value[PC]/4)] << " to_be_stalled";
 			IF->stall = true;
-			reg_value[PC] += 4;
 		}
 	}else if(IF->stall){
+		reg_value[PC] = next_PC;
 		string str;
 		IF->out >> str;
 		IF->out.str("");
@@ -23,6 +26,6 @@ void InstructionFetch()
 	}else{
 		IF = new Instruction(ins_mem[(reg_value[PC])/4]);
 		IF->out << "0x" << setfill('0') << setw(8) << hex << uppercase << ins_mem[(reg_value[PC]/4)];	
-		reg_value[PC] += 4;
+		reg_value[PC] = next_PC;
 	}
 }

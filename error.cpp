@@ -1,11 +1,5 @@
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <set>
-#include "memory.h"
-#include "error.h"
-#include "regfile.h"
-fstream error("error_dump.rpt", ios::out);
+#include "library.h"
+fstream error("_error_dump.rpt", ios::out);
 extern int cycle;
 extern bool halt;
 bool write_reg0(int index)

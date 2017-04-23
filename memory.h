@@ -1,6 +1,3 @@
-#include <iostream>
-#include <fstream>
-using namespace std;
 extern unsigned int PC_ini;
 extern unsigned int ins_mem[256];
 extern unsigned int num_of_ins;

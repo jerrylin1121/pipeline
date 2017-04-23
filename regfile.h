@@ -1,9 +1,6 @@
-#include <set>
-#include <sstream>
 #define HI 32
 #define LO 33
 #define PC 34
-using namespace std;
 class Instruction{
 private:
 	unsigned int instruction, funct;

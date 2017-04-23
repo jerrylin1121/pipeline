@@ -1,17 +1,6 @@
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-#include <cstdlib>
-#include "memory.h"
-#include "regfile.h"
-#include "InstructionFetch.h"
-#include "InstructionDecode.h"
-#include "ALU.h"
-#include "DataMemoryAccess.h"
-#include "WriteBack.h"
+#include "library.h"
 
-using namespace std;
-fstream snap("snapshot.rpt", fstream::out);
+fstream snap("_snapshot.rpt", fstream::out);
 int cycle = 0;
 bool halt = false;
 
