@@ -7,6 +7,8 @@ extern fstream snap;
 
 void show_reg(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
 	for(set<int>::iterator it = show_set.begin(); it!=show_set.end(); ++it){
 		if(*it <= 31)
 			snap << "$" << setfill('0') << setw(2) << dec << *it << ": 0x" << setfill('0') << setw(8) << hex << uppercase << reg_value[*it] << endl;
@@ -21,6 +23,8 @@ void show_reg(void)
 
 void show_stage(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
 	snap << "IF: " << IF << endl;
 	snap << "ID: " << ID << endl;
 	snap << "EX: " << EX << endl;

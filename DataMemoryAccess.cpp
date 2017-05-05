@@ -16,7 +16,7 @@ void Instruction::DataMemoryAccess(void)
 		case 0x00:
 			switch(funct){
 				case 0x00:
-					if(!(rs==0 && rt==0 && C==0)){
+					if(!(rt==0 && rd==0 && C==0)){
 						reg_use[rd] = 2;
 					}
 				case 0x08: case 0x18: case 0x19:
@@ -25,8 +25,7 @@ void Instruction::DataMemoryAccess(void)
 					reg_use[rd] = 2;
 					break;
 			}
-	}
-	switch(opcode){
+			break;
 		case 0x08: case 0x09: case 0x0f: case 0x0c: case 0x0d: case 0x0e: case 0x0a:
 			reg_use[rt] = 2;
 			break;

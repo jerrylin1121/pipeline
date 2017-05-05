@@ -1,6 +1,6 @@
 #include "library.h"
 
-fstream snap("_snapshot.rpt", fstream::out);
+fstream snap("snapshot.rpt", fstream::out);
 int cycle = 0;
 bool halt = false;
 
@@ -8,6 +8,8 @@ bool detect_end(void);
 
 int main()
 {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
     ifstream iin("./iimage.bin", ios::in | ios::binary);
     ifstream din("./dimage.bin", ios::in | ios::binary);
 	load_instruction(&iin);

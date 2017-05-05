@@ -16,6 +16,8 @@ void ALU(void)
 }
 void Instruction::ALU(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
 	int tmp, tmp1;
 	long long int lli;
 	unsigned long long int ulli;

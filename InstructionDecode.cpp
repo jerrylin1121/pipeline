@@ -27,6 +27,8 @@ void InstructionDecode(void)
 }
 void Instruction::InstructionDecode(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
 	out.str("");
 	out.clear();
 	bool needA = false, needB = false;

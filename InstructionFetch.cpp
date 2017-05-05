@@ -4,6 +4,8 @@ extern bool flushed;
 extern int next_PC;
 void InstructionFetch()
 {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
 	if(flushed){
 		IF = new Instruction(ins_mem[(reg_value[PC])/4]);
 		IF->out << "0x" << setfill('0') << setw(8) << hex << uppercase << ins_mem[(reg_value[PC]/4)] << " to_be_flushed";
